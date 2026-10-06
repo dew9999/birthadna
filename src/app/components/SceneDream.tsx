@@ -12,8 +12,8 @@ export default function SceneDream({ onComplete }: SceneDreamProps) {
 
   useEffect(() => {
     const timers = [
-      setTimeout(() => setPhase(1), 3000),
-      setTimeout(() => setPhase(2), 7000),
+      setTimeout(() => setPhase(1), 5000),  // 5 seconds for dream line 1
+      setTimeout(() => setPhase(2), 11500), // 6.5 seconds for dream line 2
     ];
     return () => timers.forEach(clearTimeout);
   }, []);
@@ -51,7 +51,7 @@ export default function SceneDream({ onComplete }: SceneDreamProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1.2 }}
+              transition={{ duration: 1.4 }}
             >
               I dream of waking to your laugh, hand in hand, building our forever.
             </motion.p>
@@ -65,7 +65,7 @@ export default function SceneDream({ onComplete }: SceneDreamProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1.5 }}
+              transition={{ duration: 1.6 }}
             >
               The day we&apos;ll become one.
             </motion.p>
@@ -76,7 +76,7 @@ export default function SceneDream({ onComplete }: SceneDreamProps) {
               key="dream3"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 1 }}
+              transition={{ duration: 1.4 }}
               className="flex flex-col items-center"
             >
               <p
@@ -90,7 +90,7 @@ export default function SceneDream({ onComplete }: SceneDreamProps) {
                 onClick={onComplete}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8, duration: 0.8 }}
+                transition={{ delay: 0.8, duration: 1 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >

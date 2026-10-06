@@ -128,7 +128,7 @@ export default function SceneFinale() {
                 className="font-display text-4xl md:text-6xl italic font-medium"
                 style={{ color: "var(--accent-gold)" }}
               >
-                Ranu ❤️
+                Ranuchtyyy ❤️
               </p>
             </motion.div>
           )}
@@ -388,7 +388,7 @@ export default function SceneFinale() {
                 className="font-display text-4xl md:text-6xl italic font-medium"
                 style={{ color: "var(--accent-gold)" }}
               >
-                Ranu.
+                Ranuchtyyy.
               </p>
             </motion.div>
           )}
@@ -405,7 +405,7 @@ export default function SceneFinale() {
                 className="font-display text-4xl md:text-6xl italic font-light mb-3"
                 style={{ color: "var(--text-primary)" }}
               >
-                Happy Birthday, Ranu.
+                Happy Birthday, Ranuchtyyy.
               </p>
               <motion.p
                 className="font-display text-3xl md:text-4xl italic font-light mt-8"

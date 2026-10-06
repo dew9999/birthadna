@@ -135,9 +135,10 @@ export default function SceneReasons({ onComplete }: SceneReasonsProps) {
       setCurrentIndex((prev) => prev + 1);
     } else {
       setShowFinal(true);
-      setTimeout(() => setFinalPhase(1), 1500);
-      setTimeout(() => setFinalPhase(2), 3500);
-      setTimeout(() => setFinalPhase(3), 6000);
+      // Significantly slowed down transitions for comfortable reading
+      setTimeout(() => setFinalPhase(1), 4200);  // 4.2 seconds for phase 0
+      setTimeout(() => setFinalPhase(2), 9200);  // 5 seconds for phase 1
+      setTimeout(() => setFinalPhase(3), 16500); // 7.3 seconds for phase 2
     }
   }, [currentIndex]);
 
@@ -148,12 +149,12 @@ export default function SceneReasons({ onComplete }: SceneReasonsProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 1 }}
+        transition={{ duration: 1.2 }}
       >
         <div
           className="ambient-glow"
           style={{
-            background: "radial-gradient(circle, rgba(200,169,110,0.12), transparent)",
+            background: "radial-gradient(circle, rgba(200,169,110,0.14), transparent)",
             top: "40%",
             left: "50%",
             transform: "translate(-50%, -50%)",
@@ -179,8 +180,8 @@ export default function SceneReasons({ onComplete }: SceneReasonsProps) {
                 style={{ color: "var(--text-secondary)" }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 1 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 1.4 }}
               >
                 And after all these reasons...
               </motion.p>
@@ -192,8 +193,8 @@ export default function SceneReasons({ onComplete }: SceneReasonsProps) {
                 style={{ color: "var(--text-secondary)" }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 1 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 1.4 }}
               >
                 the simplest one is still the most honest.
               </motion.p>
@@ -205,8 +206,8 @@ export default function SceneReasons({ onComplete }: SceneReasonsProps) {
                 style={{ color: "var(--accent-gold)" }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 1.2 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 1.6 }}
               >
                 I love you because somewhere along the way, loving you became one of the most natural things in my life.
               </motion.p>
@@ -216,7 +217,7 @@ export default function SceneReasons({ onComplete }: SceneReasonsProps) {
                 key="f3"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 1 }}
+                transition={{ duration: 1.4 }}
               >
                 <p
                   className="font-body text-xl md:text-2xl font-light leading-relaxed mb-12"
@@ -229,7 +230,7 @@ export default function SceneReasons({ onComplete }: SceneReasonsProps) {
                   onClick={onComplete}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5, duration: 0.8 }}
+                  transition={{ delay: 0.6, duration: 1 }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >

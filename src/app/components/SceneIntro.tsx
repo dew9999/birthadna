@@ -55,7 +55,7 @@ export default function SceneIntro({ onBegin }: SceneIntroProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.2, duration: 1.2 }}
       >
-        For Ranu
+        For Ranuchtyyy
       </motion.h1>
 
       {/* Subtitle */}
