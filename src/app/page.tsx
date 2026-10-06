@@ -9,6 +9,7 @@ import SceneLetter from "./components/SceneLetter";
 import SceneDream from "./components/SceneDream";
 import SceneFinale from "./components/SceneFinale";
 import MusicButton from "./components/MusicButton";
+import FloatingHearts from "./components/FloatingHearts";
 
 type Scene = "intro" | "story" | "reasons" | "letter" | "dream" | "finale";
 
@@ -31,6 +32,9 @@ export default function Home() {
 
   return (
     <main className="relative w-full h-screen overflow-hidden bg-[#0D0D10]">
+      {/* Background Floating Hearts */}
+      <FloatingHearts />
+
       {/* Scene content */}
       {currentScene === "intro" && (
         <SceneIntro onBegin={() => transitionTo("story")} />

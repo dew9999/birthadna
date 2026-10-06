@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface SceneLetterProps {
@@ -10,15 +10,29 @@ interface SceneLetterProps {
 export default function SceneLetter({ onComplete }: SceneLetterProps) {
   const [phase, setPhase] = useState<"prompt" | "envelope" | "letter">("prompt");
   const [envelopeOpen, setEnvelopeOpen] = useState(false);
+  const [customPhotoUrl, setCustomPhotoUrl] = useState<string | null>(null);
+  const [imageError, setImageError] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleOpenEnvelope = () => {
     setEnvelopeOpen(true);
     setTimeout(() => setPhase("letter"), 1200);
   };
 
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setCustomPhotoUrl(url);
+      setImageError(false);
+    }
+  };
+
+  const photoSrc = customPhotoUrl || "/photo.jpg";
+
   return (
     <motion.div
-      className="scene"
+      className="scene overflow-y-auto py-12"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -27,11 +41,20 @@ export default function SceneLetter({ onComplete }: SceneLetterProps) {
       <div
         className="ambient-glow"
         style={{
-          background: "radial-gradient(circle, rgba(200,169,110,0.08), transparent)",
+          background: "radial-gradient(circle, rgba(200,169,110,0.1), transparent)",
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
         }}
+      />
+
+      <input
+        type="file"
+        ref={fileInputRef}
+        accept="image/*"
+        aria-label="Upload photo"
+        className="hidden"
+        onChange={handlePhotoUpload}
       />
 
       <AnimatePresence mode="wait">
@@ -51,18 +74,18 @@ export default function SceneLetter({ onComplete }: SceneLetterProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 1 }}
             >
-              One last thing.
+              One last thing for you.
             </motion.p>
             <motion.button
               className="btn-primary"
               onClick={() => setPhase("envelope")}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1.5, duration: 0.8 }}
+              transition={{ delay: 1.2, duration: 0.8 }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              Open
+              Open Letter
             </motion.button>
           </motion.div>
         )}
@@ -86,12 +109,12 @@ export default function SceneLetter({ onComplete }: SceneLetterProps) {
               <div
                 className="relative overflow-hidden"
                 style={{
-                  width: "300px",
-                  height: "200px",
+                  width: "320px",
+                  height: "210px",
                   background: "linear-gradient(135deg, #2A2530, #1E1A24)",
-                  borderRadius: "6px",
-                  border: "1px solid rgba(200, 169, 110, 0.15)",
-                  boxShadow: "0 8px 40px rgba(0,0,0,0.5)",
+                  borderRadius: "8px",
+                  border: "1px solid rgba(200, 169, 110, 0.2)",
+                  boxShadow: "0 12px 45px rgba(0,0,0,0.6)",
                 }}
               >
                 {/* Inner V shape */}
@@ -102,7 +125,8 @@ export default function SceneLetter({ onComplete }: SceneLetterProps) {
                     left: 0,
                     right: 0,
                     height: "100%",
-                    background: "linear-gradient(to bottom right, transparent 49%, rgba(200,169,110,0.05) 50%) left, linear-gradient(to bottom left, transparent 49%, rgba(200,169,110,0.05) 50%) right",
+                    background:
+                      "linear-gradient(to bottom right, transparent 49%, rgba(200,169,110,0.06) 50%) left, linear-gradient(to bottom left, transparent 49%, rgba(200,169,110,0.06) 50%) right",
                     backgroundSize: "50% 100%",
                     backgroundRepeat: "no-repeat",
                   }}
@@ -116,7 +140,7 @@ export default function SceneLetter({ onComplete }: SceneLetterProps) {
                   top: 0,
                   left: 0,
                   right: 0,
-                  height: "100px",
+                  height: "105px",
                   transformOrigin: "top center",
                   zIndex: 2,
                 }}
@@ -127,39 +151,42 @@ export default function SceneLetter({ onComplete }: SceneLetterProps) {
               >
                 <div
                   style={{
-                    width: "300px",
-                    height: "100px",
+                    width: "320px",
+                    height: "105px",
                     background: "linear-gradient(180deg, #2E2838, #2A2530)",
-                    border: "1px solid rgba(200, 169, 110, 0.15)",
+                    border: "1px solid rgba(200, 169, 110, 0.2)",
                     borderBottom: "none",
                     clipPath: "polygon(0 0, 50% 100%, 100% 0)",
                   }}
                 />
               </motion.div>
 
-              {/* Seal */}
+              {/* Wax Seal */}
               {!envelopeOpen && (
                 <motion.div
                   className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
                   animate={{
                     boxShadow: [
-                      "0 0 15px rgba(200,169,110,0.2)",
-                      "0 0 30px rgba(200,169,110,0.35)",
-                      "0 0 15px rgba(200,169,110,0.2)",
+                      "0 0 15px rgba(200,169,110,0.25)",
+                      "0 0 32px rgba(200,169,110,0.45)",
+                      "0 0 15px rgba(200,169,110,0.25)",
                     ],
                   }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
                   <div
                     style={{
-                      width: "42px",
-                      height: "42px",
+                      width: "46px",
+                      height: "46px",
                       borderRadius: "50%",
-                      background: "linear-gradient(135deg, var(--accent-gold), var(--accent-warm))",
+                      background:
+                        "linear-gradient(135deg, var(--accent-gold), var(--accent-warm))",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      fontSize: "1rem",
+                      fontSize: "1.2rem",
+                      color: "#1E1A24",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
                     }}
                   >
                     ♥
@@ -170,11 +197,11 @@ export default function SceneLetter({ onComplete }: SceneLetterProps) {
 
             {!envelopeOpen && (
               <motion.p
-                className="font-ui text-xs tracking-[0.15em] uppercase mt-6"
+                className="font-ui text-xs tracking-[0.2em] uppercase mt-6"
                 style={{ color: "var(--text-muted)" }}
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 0.6 }}
-                transition={{ delay: 0.5 }}
+                animate={{ opacity: 0.7 }}
+                transition={{ delay: 0.4 }}
               >
                 Tap to open
               </motion.p>
@@ -185,41 +212,129 @@ export default function SceneLetter({ onComplete }: SceneLetterProps) {
         {phase === "letter" && (
           <motion.div
             key="letter"
-            className="flex flex-col items-center w-full px-4"
-            initial={{ opacity: 0, y: 40 }}
+            className="flex flex-col items-center w-full max-w-2xl px-4 my-auto"
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: "easeOut" }}
           >
-            <div className="letter" style={{ overflow: "auto", maxHeight: "70vh" }}>
+            {/* Embedded Photo Card */}
+            <motion.div
+              className="relative mb-8 group cursor-pointer"
+              initial={{ scale: 0.9, rotate: -2, opacity: 0 }}
+              animate={{ scale: 1, rotate: -1, opacity: 1 }}
+              transition={{ delay: 0.3, duration: 1 }}
+              onClick={() => {
+                if (imageError && fileInputRef.current) {
+                  fileInputRef.current.click();
+                }
+              }}
+            >
+              {/* Decorative tape on polaroid */}
+              <div
+                className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-5 z-20"
+                style={{
+                  background: "rgba(200, 169, 110, 0.35)",
+                  backdropFilter: "blur(2px)",
+                  transform: "rotate(1deg)",
+                  boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+                }}
+              />
+
+              <div
+                className="p-3 pb-5 rounded-lg transition-transform duration-300 group-hover:scale-[1.02]"
+                style={{
+                  background: "#1C1822",
+                  border: "1px solid rgba(200, 169, 110, 0.25)",
+                  boxShadow: "0 15px 35px rgba(0,0,0,0.5), 0 0 20px rgba(200, 169, 110, 0.08)",
+                  width: "280px",
+                }}
+              >
+                <div className="relative aspect-[4/3] w-full rounded overflow-hidden bg-[#120F16] flex items-center justify-center">
+                  {!imageError ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={photoSrc}
+                      alt="Us"
+                      className="w-full h-full object-cover"
+                      onError={() => setImageError(true)}
+                    />
+                  ) : (
+                    <div
+                      className="p-4 text-center cursor-pointer hover:bg-white/5 transition-colors w-full h-full flex flex-col items-center justify-center"
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      <span className="text-2xl mb-1">🖼️</span>
+                      <p className="text-xs font-ui text-[var(--accent-gold)] font-medium">
+                        Click to attach photo
+                      </p>
+                      <p className="text-[10px] text-[var(--text-muted)] mt-1">
+                        (or save as photo.jpg in public folder)
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <div className="mt-3 text-center">
+                  <p
+                    className="font-display italic text-sm tracking-wide"
+                    style={{ color: "var(--accent-gold)" }}
+                  >
+                    Us ❤️
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Letter Content */}
+            <div
+              className="letter w-full p-6 sm:p-10 rounded-xl"
+              style={{
+                background: "linear-gradient(145deg, #18141E, #14101A)",
+                border: "1px solid rgba(200, 169, 110, 0.18)",
+                boxShadow: "0 20px 50px rgba(0,0,0,0.6)",
+                maxHeight: "65vh",
+                overflowY: "auto",
+              }}
+            >
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.5, duration: 1.5 }}
+                transition={{ delay: 0.6, duration: 1.2 }}
+                className="space-y-6 text-base sm:text-lg leading-relaxed font-body"
+                style={{ color: "var(--text-primary)" }}
               >
-                <p className="mb-6 leading-relaxed" style={{ textIndent: "1.5em" }}>
-                  The past year truly tested us. The sheer pressure of building a company from the ground up here in Tebessa, the exhaustion of the late-night coding sessions, and the times my focus was entirely consumed by my ambitions—it brought us to the edge. It was hard, and there were moments when the weight of everything we were dealing with could have easily broken us apart.
+                <p style={{ textIndent: "1.2em" }}>
+                  You know I’m not one to write long, cheesy speeches or hide behind forced poetry, so I’m just going to give you the plain, unvarnished truth.
                 </p>
-                <p className="mb-6 leading-relaxed font-medium text-lg" style={{ color: "#4A3548" }}>
-                  But you never walked away.
+                
+                <p style={{ textIndent: "1.2em" }}>
+                  Between the sheer amount of noise out there, everything I&apos;m constantly building, and the everyday chaos I navigate, you are the one thing that always makes absolute sense. You bring a kind of grounded clarity to my world that is damn near impossible to find, and having you by my side changes the entire dynamic.
                 </p>
-                <p className="mb-8 leading-relaxed" style={{ textIndent: "1.5em" }}>
-                  You didn&apos;t just tolerate the chaos; you anchored me. When I was running on empty, trying to carry the weight of being the founder, the developer, and the strategist all at once, you were the one person who just let me drop the armor and simply be Adnen. You stayed through the hardest months when the stress was suffocating, and we fought through the friction instead of giving up.
+
+                <p style={{ textIndent: "1.2em" }}>
+                  You handle my intensity, my focus, and my madness better than anyone else on the planet—which probably deserves an actual award by now, but you’ll have to settle for an incredible birthday instead. Having you in my corner isn&apos;t something I ever take for granted; it’s the anchor in all of this. My life is a hell of a lot better with you in it, and there is genuinely no one else I’d rather face the world with or share the wins with.
                 </p>
-                <p
-                  className="text-right italic text-sm mt-6"
-                  style={{ color: "#6B5B68", fontFamily: "var(--font-body)" }}
-                >
-                  — Adnen
+
+                <p style={{ textIndent: "1.2em" }}>
+                  I know I don&apos;t always stop to say it as often as I should, but I appreciate everything you are, everything you bring to the table, and you have my absolute, unquestioned loyalty. Today is completely about stepping back from the work, turning off the stress, and celebrating you properly. Let’s go make tonight count.
                 </p>
+
+                <div className="pt-4 text-right">
+                  <p
+                    className="font-display italic text-lg sm:text-xl font-medium"
+                    style={{ color: "var(--accent-gold)" }}
+                  >
+                    — Adnen
+                  </p>
+                </div>
               </motion.div>
             </div>
 
             <motion.button
-              className="btn-primary mt-10"
+              className="btn-primary mt-8 mb-4"
               onClick={onComplete}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 2, duration: 0.8 }}
+              transition={{ delay: 1.5, duration: 0.8 }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >

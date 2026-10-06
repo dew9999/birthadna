@@ -12,41 +12,33 @@ const storyBeats = [
   { text: "Late nights.", style: "beat" },
   { text: "Ambition.", style: "beat" },
   { text: "Stress.", style: "beat" },
-  { text: "Arguments.", style: "beat" },
+  { text: "Everyday chaos.", style: "beat" },
   { text: "Exhaustion.", style: "beat" },
-  { text: "And somehow...", style: "pause" },
+  { text: "And through all of it...", style: "pause" },
   { text: "You stayed.", style: "emotional" },
   {
-    text: "The past year truly tested us. The sheer pressure of building a company from the ground up here in Tebessa, the exhaustion of the late-night coding sessions, and the times my focus was entirely consumed by my ambitions—",
+    text: "Between the sheer amount of noise out there, everything I'm constantly building, and the everyday chaos I navigate—",
     style: "paragraph",
   },
   {
-    text: "it brought us to the edge.",
+    text: "you are the one thing that always makes absolute sense.",
     style: "emphasis",
   },
   {
-    text: "It was hard, and there were moments when the weight of everything we were dealing with could have easily broken us apart.",
+    text: "You bring a kind of grounded clarity to my world that is damn near impossible to find, and having you by my side changes the entire dynamic.",
     style: "paragraph",
   },
   {
-    text: "But you never walked away.",
+    text: "You handle my intensity, my focus, and my madness better than anyone else on the planet.",
+    style: "emphasis",
+  },
+  {
+    text: "Having you in my corner isn't something I ever take for granted; it's the anchor in all of this.",
+    style: "paragraph",
+  },
+  {
+    text: "My life is a hell of a lot better with you in it.",
     style: "emotional",
-  },
-  {
-    text: "You didn't just tolerate the chaos; you anchored me.",
-    style: "emphasis",
-  },
-  {
-    text: "When I was running on empty, trying to carry the weight of being the founder, the developer, and the strategist all at once—",
-    style: "paragraph",
-  },
-  {
-    text: "you were the one person who just let me drop the armor and simply be Adnen.",
-    style: "emphasis",
-  },
-  {
-    text: "You stayed through the hardest months when the stress was suffocating, and we fought through the friction instead of giving up.",
-    style: "paragraph",
   },
 ];
 
@@ -56,13 +48,13 @@ export default function SceneStory({ onComplete }: SceneStoryProps) {
 
   const getDelay = useCallback((style: string) => {
     switch (style) {
-      case "hero": return 3500;
-      case "beat": return 2000;
-      case "pause": return 2800;
-      case "emotional": return 4000;
-      case "paragraph": return 8000;
-      case "emphasis": return 5500;
-      default: return 3000;
+      case "hero": return 5500;      // +2s slower
+      case "beat": return 2500;      // +0.5s slower
+      case "pause": return 3500;      // +0.7s slower
+      case "emotional": return 5500;  // +1.5s slower
+      case "paragraph": return 11000; // +3s slower (11s total)
+      case "emphasis": return 7500;   // +2s slower (7.5s total)
+      default: return 3500;
     }
   }, []);
 
@@ -75,7 +67,7 @@ export default function SceneStory({ onComplete }: SceneStoryProps) {
     } else {
       const timer = setTimeout(() => {
         setShowContinue(true);
-      }, 3500);
+      }, 4500);
       return () => clearTimeout(timer);
     }
   }, [currentBeat, getDelay]);
@@ -93,11 +85,11 @@ export default function SceneStory({ onComplete }: SceneStoryProps) {
       case "emotional":
         return "font-display text-3xl md:text-5xl font-medium italic text-center leading-tight";
       case "paragraph":
-        return "font-body text-lg md:text-xl font-light text-center leading-relaxed max-w-lg";
+        return "font-body text-lg md:text-xl font-light text-center leading-relaxed max-w-xl px-4";
       case "emphasis":
-        return "font-body text-xl md:text-2xl font-normal text-center leading-relaxed max-w-lg";
+        return "font-body text-xl md:text-2xl font-normal text-center leading-relaxed max-w-xl px-4";
       default:
-        return "font-body text-xl text-center";
+        return "font-body text-xl text-center px-4";
     }
   };
 
@@ -126,7 +118,7 @@ export default function SceneStory({ onComplete }: SceneStoryProps) {
       <div
         className="ambient-glow"
         style={{
-          background: "radial-gradient(circle, rgba(184,104,125,0.12), transparent)",
+          background: "radial-gradient(circle, rgba(184,104,125,0.14), transparent)",
           top: "40%",
           left: "50%",
           transform: "translate(-50%, -50%)",
@@ -142,7 +134,7 @@ export default function SceneStory({ onComplete }: SceneStoryProps) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -15 }}
           transition={{
-            duration: beat.style === "emotional" ? 1.2 : 0.8,
+            duration: beat.style === "emotional" ? 1.4 : 0.9,
             ease: "easeOut",
           }}
         >
