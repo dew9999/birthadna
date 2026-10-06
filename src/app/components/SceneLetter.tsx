@@ -12,6 +12,7 @@ export default function SceneLetter({ onComplete }: SceneLetterProps) {
   const [envelopeOpen, setEnvelopeOpen] = useState(false);
   const [customPhotoUrl, setCustomPhotoUrl] = useState<string | null>(null);
   const [imageError, setImageError] = useState(false);
+  const [isZoomed, setIsZoomed] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleOpenEnvelope = () => {
@@ -32,7 +33,7 @@ export default function SceneLetter({ onComplete }: SceneLetterProps) {
 
   return (
     <motion.div
-      className="scene overflow-y-auto py-12"
+      className="scene overflow-y-auto px-4 py-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -41,8 +42,8 @@ export default function SceneLetter({ onComplete }: SceneLetterProps) {
       <div
         className="ambient-glow"
         style={{
-          background: "radial-gradient(circle, rgba(200,169,110,0.1), transparent)",
-          top: "50%",
+          background: "radial-gradient(circle, rgba(200,169,110,0.12), transparent)",
+          top: "40%",
           left: "50%",
           transform: "translate(-50%, -50%)",
         }}
@@ -57,11 +58,41 @@ export default function SceneLetter({ onComplete }: SceneLetterProps) {
         onChange={handlePhotoUpload}
       />
 
+      {/* Lightbox / Zoom Modal */}
+      <AnimatePresence>
+        {isZoomed && !imageError && (
+          <motion.div
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsZoomed(false)}
+          >
+            <motion.div
+              className="relative max-w-xl max-h-[85vh] p-2 bg-[#1C1822] rounded-xl border border-[var(--accent-gold)]/30 shadow-2xl"
+              initial={{ scale: 0.85 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.85 }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={photoSrc}
+                alt="Us"
+                className="w-full max-h-[75vh] object-contain rounded-lg"
+              />
+              <p className="text-center font-display italic text-sm text-[var(--accent-gold)] mt-3">
+                Us ❤️ (Tap anywhere to close)
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <AnimatePresence mode="wait">
         {phase === "prompt" && (
           <motion.div
             key="prompt"
-            className="text-center"
+            className="text-center my-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -93,7 +124,7 @@ export default function SceneLetter({ onComplete }: SceneLetterProps) {
         {phase === "envelope" && (
           <motion.div
             key="envelope"
-            className="flex flex-col items-center"
+            className="flex flex-col items-center my-auto"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95, y: -30 }}
@@ -212,58 +243,61 @@ export default function SceneLetter({ onComplete }: SceneLetterProps) {
         {phase === "letter" && (
           <motion.div
             key="letter"
-            className="flex flex-col items-center w-full max-w-2xl px-4 my-auto"
+            className="flex flex-col items-center w-full max-w-2xl mx-auto py-4"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: "easeOut" }}
           >
-            {/* Embedded Photo Card */}
+            {/* Embedded Photo Card (Full Frame - No Cropping) */}
             <motion.div
-              className="relative mb-8 group cursor-pointer"
-              initial={{ scale: 0.9, rotate: -2, opacity: 0 }}
-              animate={{ scale: 1, rotate: -1, opacity: 1 }}
-              transition={{ delay: 0.3, duration: 1 }}
+              className="relative mb-6 group cursor-pointer"
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 1 }}
               onClick={() => {
                 if (imageError && fileInputRef.current) {
                   fileInputRef.current.click();
+                } else {
+                  setIsZoomed(true);
                 }
               }}
             >
-              {/* Decorative tape on polaroid */}
+              {/* Decorative tape */}
               <div
                 className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-5 z-20"
                 style={{
-                  background: "rgba(200, 169, 110, 0.35)",
+                  background: "rgba(200, 169, 110, 0.4)",
                   backdropFilter: "blur(2px)",
-                  transform: "rotate(1deg)",
-                  boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+                  transform: "rotate(-1deg)",
+                  boxShadow: "0 2px 5px rgba(0,0,0,0.15)",
                 }}
               />
 
               <div
-                className="p-3 pb-5 rounded-lg transition-transform duration-300 group-hover:scale-[1.02]"
+                className="p-3 pb-4 rounded-xl transition-all duration-300 group-hover:scale-[1.01]"
                 style={{
                   background: "#1C1822",
-                  border: "1px solid rgba(200, 169, 110, 0.25)",
-                  boxShadow: "0 15px 35px rgba(0,0,0,0.5), 0 0 20px rgba(200, 169, 110, 0.08)",
-                  width: "280px",
+                  border: "1px solid rgba(200, 169, 110, 0.3)",
+                  boxShadow: "0 12px 40px rgba(0,0,0,0.6), 0 0 25px rgba(200, 169, 110, 0.1)",
+                  width: "min(300px, 85vw)",
                 }}
               >
-                <div className="relative aspect-[4/3] w-full rounded overflow-hidden bg-[#120F16] flex items-center justify-center">
+                {/* Full aspect image frame without cropping heads */}
+                <div className="relative w-full rounded-lg overflow-hidden bg-[#120F16] flex items-center justify-center max-h-[380px] min-h-[220px]">
                   {!imageError ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={photoSrc}
                       alt="Us"
-                      className="w-full h-full object-cover"
+                      className="w-full max-h-[360px] object-contain rounded"
                       onError={() => setImageError(true)}
                     />
                   ) : (
                     <div
-                      className="p-4 text-center cursor-pointer hover:bg-white/5 transition-colors w-full h-full flex flex-col items-center justify-center"
+                      className="p-6 text-center cursor-pointer hover:bg-white/5 transition-colors w-full flex flex-col items-center justify-center"
                       onClick={() => fileInputRef.current?.click()}
                     >
-                      <span className="text-2xl mb-1">🖼️</span>
+                      <span className="text-3xl mb-2">🖼️</span>
                       <p className="text-xs font-ui text-[var(--accent-gold)] font-medium">
                         Click to attach photo
                       </p>
@@ -273,13 +307,16 @@ export default function SceneLetter({ onComplete }: SceneLetterProps) {
                     </div>
                   )}
                 </div>
-                <div className="mt-3 text-center">
+                <div className="mt-2 text-center flex items-center justify-center gap-1.5">
                   <p
                     className="font-display italic text-sm tracking-wide"
                     style={{ color: "var(--accent-gold)" }}
                   >
                     Us ❤️
                   </p>
+                  <span className="text-[10px] text-[var(--text-muted)] opacity-60">
+                    (tap to expand)
+                  </span>
                 </div>
               </div>
             </motion.div>
@@ -289,16 +326,16 @@ export default function SceneLetter({ onComplete }: SceneLetterProps) {
               className="letter w-full p-6 sm:p-10 rounded-xl"
               style={{
                 background: "linear-gradient(145deg, #18141E, #14101A)",
-                border: "1px solid rgba(200, 169, 110, 0.18)",
+                border: "1px solid rgba(200, 169, 110, 0.2)",
                 boxShadow: "0 20px 50px rgba(0,0,0,0.6)",
-                maxHeight: "65vh",
+                maxHeight: "50vh",
                 overflowY: "auto",
               }}
             >
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.6, duration: 1.2 }}
+                transition={{ delay: 0.5, duration: 1.2 }}
                 className="space-y-6 text-base sm:text-lg leading-relaxed font-body"
                 style={{ color: "var(--text-primary)" }}
               >
@@ -330,11 +367,11 @@ export default function SceneLetter({ onComplete }: SceneLetterProps) {
             </div>
 
             <motion.button
-              className="btn-primary mt-8 mb-4"
+              className="btn-primary mt-6 mb-4"
               onClick={onComplete}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1.5, duration: 0.8 }}
+              transition={{ delay: 1.2, duration: 0.8 }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >

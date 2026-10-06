@@ -44,7 +44,7 @@ export default function SceneIntro({ onBegin }: SceneIntroProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 1 }}
       >
-        07 / 10
+        07 / 10 / 2004
       </motion.p>
 
       {/* Title */}
